@@ -1,18 +1,34 @@
+import { useEffect, useState } from "react";
 import useGetAllUsers from "../hooks/useGetAllUsers";
 import TableUsers from "./TableUsers";
 
 const ListUsers = () => {
-  const { users, loading, error, HandleDeleteUser } = useGetAllUsers();
+  const {
+    users,
+    loading,
+    error,
+    handleMemoizedDeleteUser,
+    handleMemoizedFilterUserByName,
+  } = useGetAllUsers();
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearchChange = (value: string) => {
+    setSearchName(value);
+  };
+
+  useEffect(() => {
+    handleMemoizedFilterUserByName(searchName);
+  }, [searchName, handleMemoizedFilterUserByName]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div>
-      {loading ? (
-        "Loading users..."
-      ) : error ? (
-        `Error: ${error}`
-      ) : (
-        <TableUsers users={users} handleDeleteUser={HandleDeleteUser} />
-      )}
-    </div>
+    <TableUsers
+      users={users}
+      handleDeleteUser={handleMemoizedDeleteUser}
+      handleSearchChange={handleSearchChange}
+    />
   );
 };
 
