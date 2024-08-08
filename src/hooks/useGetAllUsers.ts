@@ -34,8 +34,7 @@ const useGetAllUsers = () => {
       if (name === "") {
         setUsersToFilter(users);
       } else {
-        setUsersToFilter((prevUsers) =>
-          prevUsers.filter((user) =>
+        setUsersToFilter(users.filter((user) =>
             user.name.toLowerCase().includes(name.toLowerCase())
           )
         );
